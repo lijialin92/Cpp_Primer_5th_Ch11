@@ -55,7 +55,7 @@ std::string& trans(std::string& s)
         else if(s[i] == ',' || s[i] == '.')
             s.erase(i, 1);
     }
-
+    return s;
 }
 void exercise11_4()
 {
@@ -69,8 +69,7 @@ void exercise11_4()
     std::string word;
     while(in >> word)
     {
-        trans(word);
-        ++words[word];
+        ++words[trans(word)];
     }
     for(const auto& i : words)
         std::cout << i.first << " " << i.second <<"\t";
