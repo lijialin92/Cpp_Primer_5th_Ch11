@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 #include <algorithm>
+#include <vector>
+#include <set>
 
 /**
  * exercise 11.1
@@ -75,9 +77,88 @@ void exercise11_4()
         std::cout << i.first << " " << i.second <<"\t";
 }
 
+/**
+ * exercise11.5
+ * map 保存<关键字，值>这样的一对值，按关键字访问值。
+ * set 保存值的集合，按给的值访问数据*/
+
+/**
+ * exercise11.6
+ * set 和 list都可以元素的集合
+ * set: 不需要保存元素的顺序的话就用set.
+ * list：保存了元素的前后顺序。*/
+
+/**
+ * exercise11.7*/
+void addFamily(std::map<std::string, std::vector<std::string>>& f, const std::string& s)
+{
+    if(f.find(s) == f.end())
+        f[s] = std::vector<std::string>();
+    else
+        std::cout << "this family already exist!" << std::endl;
+}
+void addName(std::map<std::string, std::vector<std::string>>& f, const std::string& family, const std::string& name)
+{
+    if(f.find(family) == f.end())
+        std::cout << "no such a family in Marklohe!" << std::endl;
+    else
+        f[family].push_back(name);
+}
+void exercise11_7()
+{
+    std::map<std::string, std::vector<std::string>> Marklohe;
+    addFamily(Marklohe, "Olaf");
+    addFamily(Marklohe, "Joerg");
+    addName(Marklohe, "Olaf", "aaa");
+    addName(Marklohe, "Olaf", "bbb");
+    addName(Marklohe, "Joerg", "aaa");
+    addName(Marklohe, "Joerg", "bbb");
+    addName(Marklohe, "AAA", "aaa");
+
+    for(const auto& i:Marklohe)
+    {
+        std::cout << i.first << " family have: " << "\t";
+        for(const auto& j:i.second)
+            std::cout << j << " ";
+        std::cout << std::endl;
+    }
+}
+
+/**
+ * exercise11.8*/
+void addWord(std::vector<std::string>& words, const std::string& word)
+{
+    if(find(words.begin(),words.end(),word) == words.end())
+        words.push_back(word);
+    else
+        std::cout << "this word is already in the word list!" << std::endl;
+}
+void exercise11_8()
+{
+    std::vector<std::string> words;
+    addWord(words, "aaa");
+    addWord(words, "bbb");
+    addWord(words, "aaa");
+    addWord(words, "bbb");
+    addWord(words, "ccc");
+    for(const auto &i : words)
+        std::cout << i << "\t";
+}
+
+void exercise11_8_set()
+{
+    std::set<std::string> words;
+    words.insert("aaa");
+    words.insert("bbb");
+    words.insert("aaa");
+    words.insert("bbb");
+    words.insert("ccc");
+    for(const auto& i : words)
+        std::cout << i << "\t";
+}
 
 int main() {
-    exercise11_4()
+    exercise11_8_set()
     ;
     return 0;
 }
