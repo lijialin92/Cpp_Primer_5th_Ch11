@@ -8,6 +8,7 @@
 #include <list>
 #include <sstream>
 #include <utility>
+#include <iterator>
 
 /**
  * exercise 11.1
@@ -28,6 +29,8 @@
  * For deque: 与vector类似，可以频繁在头尾添加或者删除元素
  * For map: 通过元素的默写特征来访问元素。学生的名字来查询学生的其他信息，学生的名字作为关键字，学生的信息作为元素值。
  * For set: 是集合类型。*/
+
+class iterator;
 
 /**
  * exercise 11.3*/
@@ -273,8 +276,46 @@ void exercise11_14()
     }
 }
 
+/**
+ * exercise11.15
+ * map<int, vector<int>>
+ * mapped_type is vector<int>
+ * key_type is int
+ * value_type is pair<int, vector<int>>*/
+
+/**
+ * exercise11.16*/
+void exercise11_16()
+{
+    std::map<int, int> a;
+    auto it = a.begin();
+    it->second = 1;
+    std::cout << it->second << std::endl;
+}
+
+/**exercise11.17
+ * std::multiset<std::string> c;
+ * std::vector<std::string> v;
+ * copy(v.begin(), v.end(), inserter(c, c.end())) is false
+ * copy(v.begin(), v.end(), back_inserter(c)) is false
+ * copy(c.begin(), c.end(), inserter(v, v,end())) is right
+ * copy(c.begin(), c.end(), back_inserter(v))is right*/
+
+/**
+ * exercise 11.18*/
+void exercise11_18()
+{
+    std::map<std::string, size_t> words;
+    auto it = words.begin();
+}
+
+/**
+ * exercise 11.19
+ * please use auto, for exercise 18 I have tried with different iterator but no of them works*/
+
+
 int main() {
-    exercise11_14()
+    exercise11_16()
     ;
     return 0;
 }
