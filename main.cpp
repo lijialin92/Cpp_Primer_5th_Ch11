@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <vector>
 #include <set>
+#include <list>
+#include <sstream>
+#include <utility>
 
 /**
  * exercise 11.1
@@ -157,8 +160,121 @@ void exercise11_8_set()
         std::cout << i << "\t";
 }
 
+/**
+ * exercise11.9*/
+void exercise11_9()
+{
+    std::map<std::string, std::list<int>> wordLineNo;
+    std::fstream in("paragraph.txt");
+    std::string line;
+    int lineNo = 0;
+    std::string word;
+    while(getline(in, line))
+    {
+        lineNo++;
+        std::istringstream lineIn(line);
+        while(lineIn >> word)
+        {
+            wordLineNo[word].push_back(lineNo);
+        }
+    }
+    for(const auto& i : wordLineNo)
+    {
+        std::cout << i.first << " : ";
+        for(const auto& j : i.second)
+            std::cout << j << " ";
+        std::cout << std::endl;
+    }
+}
+
+/**
+ * exercise11.10
+ * map<vector<int>::interator, int> 是可以的，因为vector的迭代器是支持 < 操作的。
+ * map<list<int>::interator, int>是不可以的，因为list的迭代器是不支持 < 操作的，因为list的元素不是连续储存的。*/
+
+/**
+ * exercise11.11, because we do not define the sales_data class so we comment this codes*/
+/*void exercise11_11()
+{
+    bool* ptrCompareIsbn = &Sales_data::compareIsbn;
+    map<Sales_data, ptrCompareIsbn> bookstore(compareIsbn);
+}*/
+
+/**
+ * exercise11.12*/
+void exercise11_12()
+{
+    std::vector<std::pair<std::string, int>> a;
+    std::fstream in("string_int.txt");
+    if(!in)
+        std::cout << "fail to open file!" << std::endl;
+    std::string str;
+    int num;
+    while(in >> str && in >> num)
+    {
+        a.push_back({str, num});
+    }
+    for(const auto& i : a)
+        std::cout << i.first << " " << i.second << std::endl;
+}
+
+/**
+ * exercise11.13*/
+void exercise11_13()
+{
+    std::vector<std::pair<std::string, int>> a;
+    std::fstream in("string_int.txt");
+    if(!in)
+        std::cout << "fail to open file!" << std::endl;
+    std::string str;
+    int num;
+    while(in >> str && in >> num)
+    {
+        //there are three different ways to init a pair. i think using {} is the most easy way.
+        /*a.push_back({str, num});
+        a.push_back(std::pair<std::string, int>(str, num));
+        a.push_back(make_pair(str, num));*/
+    }
+    for(const auto& i : a)
+        std::cout << i.first << " " << i.second << std::endl;
+}
+
+/**
+ * exercise11.14*/
+void addFamilyWithBirthday(std::map<std::string, std::vector<std::pair<std::string, std::string>>>& f, const std::string& s)
+{
+    if(f.find(s) == f.end())
+        f[s] = std::vector<std::pair<std::string, std::string>>();
+    else
+        std::cout << "this family already exist!" << std::endl;
+}
+void addNameWithBirthday(std::map<std::string, std::vector<std::pair<std::string, std::string>>>& f, const std::string& family,
+        const std::string& name, const std::string birthday)
+{
+    if(f.find(family) == f.end())
+        std::cout << "no such a family in Marklohe!" << std::endl;
+    else
+        f[family].push_back({name, birthday});
+}
+void exercise11_14()
+{
+    std::map<std::string, std::vector<std::pair<std::string, std::string>>> Marklohe;
+    addFamilyWithBirthday(Marklohe, "James");
+    addFamilyWithBirthday(Marklohe, "Smith");
+    addNameWithBirthday(Marklohe, "James", "leo", "12.09.2011");
+    addNameWithBirthday(Marklohe, "James", "tom", "18.03.2016");
+    addNameWithBirthday(Marklohe, "Smith", "jack", "22.12.1998");
+    addNameWithBirthday(Marklohe, "Smith", "ali", "24.09.1994");
+    for(const auto& i : Marklohe)
+    {
+        std::cout << i.first << " : " << std::endl;
+        for(const auto& j : i.second)
+            std::cout << "name: " << j.first << ", birthday: " << j.second << std::endl;
+    }
+}
+
 int main() {
-    exercise11_8_set()
+    exercise11_14()
     ;
     return 0;
 }
