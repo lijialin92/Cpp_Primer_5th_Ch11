@@ -9,6 +9,7 @@
 #include <sstream>
 #include <utility>
 #include <iterator>
+#include <unordered_map>
 
 /**
  * exercise 11.1
@@ -458,8 +459,129 @@ void exercise11_31()
         std::cout << i.first << ": " << i.second << std::endl;
 }
 
+/**
+ * exercise 11.33*/
+std::map<std::string, std::string> buildMap(std::fstream& r)
+{
+    std::map<std::string, std::string> m;
+    std::string key, value;
+    while(r >> key && getline(r, value))
+    {
+        if(value.size() > 1)
+            m[key] = value.substr(1);
+        else
+            std::cout << "no more rule." << std::endl;
+    }
+    return m;
+}
+
+std::string transform(const std::map<std::string, std::string>& m, const std::string& s)
+{
+    auto it = m.find(s);
+    if(it != m.end())
+        return it->second;
+    else
+        return s;
+}
+
+void exercise11_33()
+{
+    std::fstream rulesFile("transRules.txt");
+    std::fstream input("transWords.txt");
+    std::map<std::string, std::string> m = buildMap(rulesFile);
+/*    for(const auto& i:m)
+        std::cout << i.first << i.second << std::endl;*/
+    std::string word, line;
+    while(getline(input, line))
+    {
+        std::istringstream lineIn(line);
+        while(lineIn >> word)
+        {
+            std::cout << transform(m, word) << " ";
+        }
+
+        std::cout << std::endl;
+    }
+}
+
+/**
+ * exercise 11.34
+ * if in the map there is no this key, than it will a new key
+ */
+
+/**exercise 11.35
+ * 当关键字已经存在的时候两者的结果不相同。
+ * 下标操作：下标操作会返回这个key的值，然后进行复制操作。
+ * insert()：如果insert(key,value)的key是已经存在话，就不会改变这个key的值。*/
+
+/**
+  * exercise 11.36
+  * by using the if(value.size() > 1) which means if value has more than one character(not only one space), then there is rule.
+  * otherwise there is no more rules.*/
+
+/**
+ * exercise 11.37
+ * 无序容器性能更好。当元素的关键字类型没有明显的序关系是的时候可以使用。
+ * 有序容器可以维护元素的序，但是维护成本非常高。*/
+
+void countWordsWithUnorderedmap()
+{
+    std::unordered_map<std::string, size_t> m;
+    std::fstream in("words.txt");
+    if(!in)
+        std::cout << "fail to open the fail!" << std::endl;
+    std::string word;
+    while(in >> word)
+        m[word]++;
+    for(const auto& i : m)
+        std::cout << i.first << "(" << i.second << ")" << std::endl;
+}
+
+std::unordered_map<std::string, std::string> buildUmap(std::fstream& r)
+{
+    std::unordered_map<std::string, std::string> m;
+    std::string key, value;
+    while(r >> key && getline(r, value))
+    {
+        if(value.size() > 1)
+            m[key] = value.substr(1);
+        else
+            std::cout << "no more rule." << std::endl;
+    }
+    return m;
+}
+
+std::string transformUmap(const std::unordered_map<std::string, std::string>& m, const std::string& s)
+{
+    auto it = m.find(s);
+    if(it != m.end())
+        return it->second;
+    else
+        return s;
+}
+
+void exercise11_38()
+{
+    std::fstream rulesFile("transRules.txt");
+    std::fstream input("transWords.txt");
+    std::unordered_map<std::string, std::string> m = buildUmap(rulesFile);
+/*    for(const auto& i:m)
+        std::cout << i.first << i.second << std::endl;*/
+    std::string word, line;
+    while(getline(input, line))
+    {
+        std::istringstream lineIn(line);
+        while(lineIn >> word)
+        {
+            std::cout << transformUmap(m, word) << " ";
+        }
+
+        std::cout << std::endl;
+    }
+}
+
 int main() {
-    exercise11_31()
+    exercise11_38()
             ;
     return 0;
 }
