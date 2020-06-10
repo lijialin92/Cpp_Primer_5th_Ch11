@@ -8,6 +8,8 @@
 #include <list>
 #include <sstream>
 #include <utility>
+#include <iterator>
+#include <unordered_map>
 
 /**
  * exercise 11.1
@@ -28,6 +30,8 @@
  * For deque: 与vector类似，可以频繁在头尾添加或者删除元素
  * For map: 通过元素的默写特征来访问元素。学生的名字来查询学生的其他信息，学生的名字作为关键字，学生的信息作为元素值。
  * For set: 是集合类型。*/
+
+class iterator;
 
 /**
  * exercise 11.3*/
@@ -273,8 +277,311 @@ void exercise11_14()
     }
 }
 
+/**
+ * exercise11.15
+ * map<int, vector<int>>
+ * mapped_type is vector<int>
+ * key_type is int
+ * value_type is pair<int, vector<int>>*/
+
+/**
+ * exercise11.16*/
+void exercise11_16()
+{
+    std::map<int, int> a;
+    auto it = a.begin();
+    it->second = 1;
+    std::cout << it->second << std::endl;
+}
+
+/**exercise11.17
+ * std::multiset<std::string> c;
+ * std::vector<std::string> v;
+ * copy(v.begin(), v.end(), inserter(c, c.end())) is false
+ * copy(v.begin(), v.end(), back_inserter(c)) is false
+ * copy(c.begin(), c.end(), inserter(v, v,end())) is right
+ * copy(c.begin(), c.end(), back_inserter(v))is right*/
+
+/**
+ * exercise 11.18*/
+void exercise11_18()
+{
+    std::map<std::string, size_t> words;
+    auto it = words.begin();
+}
+
+/**
+ * exercise 11.19
+ * please use auto, for exercise 18 I have tried with different iterator but no of them works*/
+
+/**
+ * exercise 11.20
+ * by using insert() is more easy to understand*/
+void exercise11_20()
+{
+    std::fstream in("words.txt");
+    if(!in)
+    {
+        std::cout << "fail to open file!" << std::endl;
+        exit(1);
+    }
+    std::map<std::string, size_t> words;
+    std::string word;
+    while(in >> word)
+    {
+        auto ret = words.insert({word, 1});
+        if(!ret.second)
+        {
+            (*(ret.first)).second++;
+        }
+    }
+    for(const auto& i : words)
+        std::cout << i.first << " " << i.second <<"\t";
+}
+
+/**
+ * exercise 11.21
+ * combine insert() and if(){} in the previous exercise.*/
+
+/**
+ * exercise 11.22
+ * parameter: pair<string, vector<int>>
+ * return type: pair<map<string, vector<int>>::iterator, bool>*/
+
+/**exercise 11.23*/
+void addM(std::multimap<std::string, std::string>& m, const std::string& lastName, const std::string& firstName)
+{
+    m.insert(std::pair<std::string, std::string>(lastName, firstName));
+/*    m.insert({lastName, firstName});
+    m.insert(make_pair(lastName, firstName));*/
+}
+void exercise11_23()
+{
+    std::multimap<std::string, std::string> Marklohe;
+    addM(Marklohe, "John", "Hand");
+    addM(Marklohe, "John", "Schuhe");
+    addM(Marklohe, "John", "Handy");
+    addM(Marklohe, "Alfa", "JK");
+    for(const auto& i : Marklohe)
+        std::cout << i.first << " " << i.second << std::endl;
+}
+
+/**
+ * exercise 11.24
+ * if map it is already has a key 0, the the codes means to give the value to the key 0.
+ * if map it is not has the key o, then it means to init a new pair<int, int> key value 0 and mapped value is 0(init).
+ * then assign 1 to the mapped value.*/
+
+/**
+ * exercise 11.25
+ * this will the change the first value of element of vector<int>.
+ * but for this situation, there will be a error because there is no element in the vector<int> m. Can not assign a value
+ * to the first element of m, because there is even no first element.*/
+
+/**
+ * exercise 11.26*/
+void exercise11_26()
+{
+    std::map<int, int> m;
+    m[1] = 11;
+    m[2] = 22;
+    int a = m[1];
+    int b = m[2];
+    auto c = m.at(2);
+
+    std::cout << a << "\t" << b << std::endl;
+    std::cout << m.at(1) << "\t" << c << m.at(3);
+}
+
+/**
+ * exercise 11.27
+ * m.find(k) 只返回指向第一个关键字是k的元素；而count(k), 返回有多少元素等于关键字*/
+
+/**
+ * exercise 11.28*/
+void exercise11_28()
+{
+    std::map<std::string, std::vector<int>> m;
+    std::map<std::string, std::vector<int>>::iterator it;
+}
+
+/**
+ * exercise 11.29
+ * upper_bound(k): the first element that bigger than k
+ * lower_bound(k): the first element that not smaller than the k
+ * equal_range(k): a pair<iterator a, iterator b> in the range of iterator a and b, all the elements are equal to k.*/
+
+/**exercise 11.30
+ * pos.first 如果存在的关键字的话，就是第一个等于这个关键字的元素。->就是这个元素中的值。也就是关键字所代表的这个作家的书。++pos.first
+ * 就是把这个迭代器后移，一直到不等于关键字为止。*/
+
+/**
+ * exercise 11.31*/
+void findAndDelete(std::multimap<std::string, std::string>& a, const std::string& author)
+{
+    int cnt = a.count(author);
+    if(a.find(author) == a.end())
+        std::cout << "no this author!" << std::endl;
+    else
+        while(cnt)
+        {
+            a.erase(a.find(author));
+            --cnt;
+        }
+
+}
+
+void findAndDeleteWithEqualRange(std::multimap<std::string, std::string>& a, const std::string& author)
+{
+    auto ret = a.equal_range(author);
+    if(ret.first == ret.second){
+        std::cout << "no this author!" << std::endl;
+    } else{
+        a.erase(ret.first, ret.second);
+    }
+}
+void exercise11_31()
+{
+    std::multimap<std::string, std::string> authors;
+    authors.insert({"a", "222"});
+    authors.insert(std::pair<std::string, std::string>("a", "666"));
+    authors.insert(std::make_pair("a", "111"));
+    authors.insert({"b", "000"});
+    authors.insert({"b", "888"});
+    authors.insert({"d", "9090"});
+    authors.insert({"c", "333"});
+    authors.insert({"c", "444"});
+    findAndDelete(authors, "aaa");
+    findAndDelete(authors, "a");
+    findAndDeleteWithEqualRange(authors, "bbb");
+    findAndDeleteWithEqualRange(authors, "b");
+    for(const auto& i : authors)
+        std::cout << i.first << ": " << i.second << std::endl;
+}
+
+/**
+ * exercise 11.33*/
+std::map<std::string, std::string> buildMap(std::fstream& r)
+{
+    std::map<std::string, std::string> m;
+    std::string key, value;
+    while(r >> key && getline(r, value))
+    {
+        if(value.size() > 1)
+            m[key] = value.substr(1);
+        else
+            std::cout << "no more rule." << std::endl;
+    }
+    return m;
+}
+
+std::string transform(const std::map<std::string, std::string>& m, const std::string& s)
+{
+    auto it = m.find(s);
+    if(it != m.end())
+        return it->second;
+    else
+        return s;
+}
+
+void exercise11_33()
+{
+    std::fstream rulesFile("transRules.txt");
+    std::fstream input("transWords.txt");
+    std::map<std::string, std::string> m = buildMap(rulesFile);
+/*    for(const auto& i:m)
+        std::cout << i.first << i.second << std::endl;*/
+    std::string word, line;
+    while(getline(input, line))
+    {
+        std::istringstream lineIn(line);
+        while(lineIn >> word)
+        {
+            std::cout << transform(m, word) << " ";
+        }
+
+        std::cout << std::endl;
+    }
+}
+
+/**
+ * exercise 11.34
+ * if in the map there is no this key, than it will a new key
+ */
+
+/**exercise 11.35
+ * 当关键字已经存在的时候两者的结果不相同。
+ * 下标操作：下标操作会返回这个key的值，然后进行复制操作。
+ * insert()：如果insert(key,value)的key是已经存在话，就不会改变这个key的值。*/
+
+/**
+  * exercise 11.36
+  * by using the if(value.size() > 1) which means if value has more than one character(not only one space), then there is rule.
+  * otherwise there is no more rules.*/
+
+/**
+ * exercise 11.37
+ * 无序容器性能更好。当元素的关键字类型没有明显的序关系是的时候可以使用。
+ * 有序容器可以维护元素的序，但是维护成本非常高。*/
+
+void countWordsWithUnorderedmap()
+{
+    std::unordered_map<std::string, size_t> m;
+    std::fstream in("words.txt");
+    if(!in)
+        std::cout << "fail to open the fail!" << std::endl;
+    std::string word;
+    while(in >> word)
+        m[word]++;
+    for(const auto& i : m)
+        std::cout << i.first << "(" << i.second << ")" << std::endl;
+}
+
+std::unordered_map<std::string, std::string> buildUmap(std::fstream& r)
+{
+    std::unordered_map<std::string, std::string> m;
+    std::string key, value;
+    while(r >> key && getline(r, value))
+    {
+        if(value.size() > 1)
+            m[key] = value.substr(1);
+        else
+            std::cout << "no more rule." << std::endl;
+    }
+    return m;
+}
+
+std::string transformUmap(const std::unordered_map<std::string, std::string>& m, const std::string& s)
+{
+    auto it = m.find(s);
+    if(it != m.end())
+        return it->second;
+    else
+        return s;
+}
+
+void exercise11_38()
+{
+    std::fstream rulesFile("transRules.txt");
+    std::fstream input("transWords.txt");
+    std::unordered_map<std::string, std::string> m = buildUmap(rulesFile);
+/*    for(const auto& i:m)
+        std::cout << i.first << i.second << std::endl;*/
+    std::string word, line;
+    while(getline(input, line))
+    {
+        std::istringstream lineIn(line);
+        while(lineIn >> word)
+        {
+            std::cout << transformUmap(m, word) << " ";
+        }
+
+        std::cout << std::endl;
+    }
+}
+
 int main() {
-    exercise11_14()
-    ;
+    exercise11_38()
+            ;
     return 0;
 }
